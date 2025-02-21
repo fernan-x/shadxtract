@@ -11,7 +11,7 @@ function NotFoundPage() {
                 Page not found
             </h2>
             <p className="text-muted-foreground mb-8">
-                Sorry, we couldn't find the page you're looking for.
+                Sorry, we couldn&apos;t find the page you&apos;re looking for.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Link href='/' className='flex items-center justify-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/80 transition-colors'>

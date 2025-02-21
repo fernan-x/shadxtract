@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { MenuIcon } from 'lucide-react';
 import React, { useState } from 'react'
@@ -25,8 +25,8 @@ export default function DesktopSidebar() {
                         href={route.href}
                         className={buttonVariants({
                             variant: activeRoute.href === route.href
-                                ? "sidebarItemActive"
-                                : "sidebarItem",
+                                ? 'sidebarItemActive'
+                                : 'sidebarItem',
                         })}
                     >
                         <route.icon size={20} />
@@ -63,8 +63,8 @@ export function MobileSidebar() {
                                 href={route.href}
                                 className={buttonVariants({
                                     variant: activeRoute.href === route.href
-                                        ? "sidebarItemActive"
-                                        : "sidebarItem",
+                                        ? 'sidebarItemActive'
+                                        : 'sidebarItem',
                                 })}
                                 onClick={() => setIsOpen(prev => !prev)}
                             >
