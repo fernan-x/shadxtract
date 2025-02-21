@@ -3,6 +3,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
 package-lock.json
 .next
 
@@ -16,3 +17,7 @@ package-lock.json
 *.njsproj
 *.sln
 *.sw?
+
+# Prisma
+/prisma/dev.db
+/prisma/dev.db-journal
