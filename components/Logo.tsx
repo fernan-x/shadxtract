@@ -6,12 +6,14 @@ import React from 'react'
 export default function Logo({
     fontSize = 'text-2xl',
     iconSize = 20,
+    onClick = () => null,
 }: {
     fontSize?: string,
     iconSize?: number,
+    onClick?: () => void,
 }) {
   return (
-    <Link href='/' className={cn('text-2xl font-extrabold flex items-center gap-2', fontSize)}>
+    <Link href='/' className={cn('text-2xl font-extrabold flex items-center gap-2', fontSize)} onClick={onClick}>
         <div className="rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 p-2">
             <SquareDashedMousePointer size={iconSize} className='stroke-white' />
         </div>
