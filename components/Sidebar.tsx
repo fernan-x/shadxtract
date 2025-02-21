@@ -6,7 +6,7 @@ import Logo from './Logo';
 import Link from 'next/link';
 import { Button, buttonVariants } from './ui/button';
 import { useActiveRoute, useRoutes } from '@/hooks/use-routes';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 
 export default function DesktopSidebar() {
     const routes = useRoutes();
@@ -55,6 +55,12 @@ export function MobileSidebar() {
                     className='w-[calc(100% - 3rem)] space-y-4'
                     side='left'
                 >
+                    <SheetHeader className='sr-only'>
+                        <SheetTitle>Menu</SheetTitle>
+                        <SheetDescription>
+                            Accessibility menu
+                        </SheetDescription>
+                    </SheetHeader>
                     <Logo onClick={() => setIsOpen(prev => !prev)} />
                     <div className="flex flex-col gap-1">
                         {routes.map((route) => (
