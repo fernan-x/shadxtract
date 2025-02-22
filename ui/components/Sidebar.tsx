@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import Logo from './Logo';
 import Link from 'next/link';
 import { Button, buttonVariants } from './ui/button';
-import { useActiveRoute, useRoutes } from '@/hooks/use-routes';
+import { useActiveRoute, useRoutes } from '@/ui/hooks/use-routes';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 
 export default function DesktopSidebar() {

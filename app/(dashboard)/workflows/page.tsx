@@ -1,6 +1,6 @@
 import { getWorkflowsForUser } from '@/actions/workflows/getWorkflowsForUser';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Skeleton } from '@/components/ui/skeleton'
+import { Alert, AlertDescription, AlertTitle } from '@/ui/components/ui/alert';
+import { Skeleton } from '@/ui/components/ui/skeleton'
 import { AlertCircle, Inbox, InboxIcon } from 'lucide-react';
 import React, { Suspense } from 'react'
 
