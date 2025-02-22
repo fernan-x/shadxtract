@@ -1,7 +1,7 @@
-import { getWorkflowsForUser } from '@/actions/workflows/getWorkflowsForUser';
+import { getWorkflowsUseCase } from '@/providers/workflow.provider';
 import { Alert, AlertDescription, AlertTitle } from '@/ui/components/ui/alert';
 import { Skeleton } from '@/ui/components/ui/skeleton'
-import { AlertCircle, Inbox, InboxIcon } from 'lucide-react';
+import { AlertCircle, InboxIcon } from 'lucide-react';
 import React, { Suspense } from 'react'
 
 export default function page() {
@@ -37,7 +37,7 @@ function UserWorkflowsSkeleton() {
 
 async function UserWorkflows() {
   try {
-    const workflows = await getWorkflowsForUser();
+    const workflows = await getWorkflowsUseCase.execute();
     if (!workflows) {
       throw new Error('Cannot fetch workflows');
     }
