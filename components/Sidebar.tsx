@@ -18,7 +18,7 @@ export default function DesktopSidebar() {
                 <Logo />
             </div>
             <div className='p-2'>TODO CREDITS</div>
-            <div className='flex flex-col p-2'>
+            <div className='flex flex-col gap-1 p-2'>
                 {routes.map((route) => (
                     <Link
                         key={route.href}
@@ -62,7 +62,7 @@ export function MobileSidebar() {
                         </SheetDescription>
                     </SheetHeader>
                     <Logo onClick={() => setIsOpen(prev => !prev)} />
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1 p-2">
                         {routes.map((route) => (
                             <Link
                                 key={route.href}
