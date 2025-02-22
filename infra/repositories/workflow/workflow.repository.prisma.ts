@@ -4,7 +4,7 @@ import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import { WorkflowFactory } from '@/core/domain/workflow/workflow.factory';
 
-export class WorkflowRepositoryImpl implements WorkflowRepository {
+export class WorkflowRepositoryPrisma implements WorkflowRepository {
   async getAll(): Promise<Workflow[]> {
         const { userId } = await auth();
         if (!userId) {
