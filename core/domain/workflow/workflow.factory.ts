@@ -5,8 +5,8 @@ export type WorkflowFactoryData = {
     id?: string;
     userId?: string;
     name?: string;
-    description?: string;
-    definition?: string;
+    description?: string | null;
+    definition?: string | null;
     status?: string;
     createdAt?: Date;
     updatedAt?: Date;
@@ -18,11 +18,11 @@ export class WorkflowFactory {
       data?.id ?? '',
       data?.userId ?? '',
       data?.name ?? 'Untitled Workflow',
-      data?.definition ?? '{}',
+      data?.definition ?? null,
       new WorkflowStatus(data?.status ?? 'draft'),
       data?.createdAt ?? new Date(),
       data?.updatedAt ?? new Date(),
-      data?.description
+      data?.description ?? null,
     );
   }
 }

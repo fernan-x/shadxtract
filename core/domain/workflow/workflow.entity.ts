@@ -4,8 +4,8 @@ export class Workflow {
   private readonly id: string;
   private readonly userId: string;
   private name: string;
-  private description?: string;
-  private definition: string;
+  private description: string | null;
+  private definition: string | null;
   private status: WorkflowStatus;
   private readonly createdAt: Date;
   private updatedAt: Date;
@@ -14,16 +14,15 @@ export class Workflow {
     id: string,
     userId: string,
     name: string,
-    definition: string,
+    definition: string | null = null,
     status: WorkflowStatus,
     createdAt?: Date,
     updatedAt?: Date,
-    description?: string
+    description: string | null = null
   ) {
     if (!id.trim()) throw new Error('Workflow ID cannot be empty');
     if (!userId.trim()) throw new Error('User ID cannot be empty');
     if (!name.trim()) throw new Error('Workflow name cannot be empty');
-    if (!definition.trim()) throw new Error('Workflow definition cannot be empty');
 
     this.id = id;
     this.userId = userId;
@@ -47,11 +46,11 @@ export class Workflow {
     return this.name;
   }
 
-  getDescription(): string | undefined {
+  getDescription(): string | null {
     return this.description;
   }
 
-  getDefinition(): string {
+  getDefinition(): string | null {
     return this.definition;
   }
 
@@ -72,7 +71,7 @@ export class Workflow {
     this.updatedAt = new Date();
   }
 
-  updateDescription(newDescription?: string) {
+  updateDescription(newDescription: string | null = null) {
     this.description = newDescription;
     this.updatedAt = new Date();
   }

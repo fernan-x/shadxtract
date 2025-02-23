@@ -32,24 +32,26 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
         }));
     }
 
-    async create(name: string, description?: string): Promise<Workflow> {
+    async create(name: string, description: string | null = null): Promise<Workflow> {
         const { userId } = await auth();
         if (!userId) {
             throw new Error('User not authenticated');
         }
 
-        const workflow = WorkflowFactory.create({
-            userId,
-            name,
-            description,
+        const result = await prisma.workflow.create({
+            data: {
+                userId,
+                name,
+                description,
+                status: 'draft',
+                definition: '',
+            },
         });
 
-        // await prisma.workflow.create({
-        //     data: {
-        //         ...workflow,
-        //     },
-        // });
+        if (!result) {
+            throw new Error('Failed to create workflow');
+        }
 
-        return workflow;
+        return WorkflowFactory.create({ ...result });
     }
 }

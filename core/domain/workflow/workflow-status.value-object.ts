@@ -1,7 +1,7 @@
 export class WorkflowStatus {
     private readonly value: string;
 
-    private static readonly ALLOWED_STATUSES = ['draft', 'active', 'archived'];
+    private static readonly ALLOWED_STATUSES = ['draft', 'published'];
 
     constructor(status: string) {
         if (!WorkflowStatus.ALLOWED_STATUSES.includes(status)) {
