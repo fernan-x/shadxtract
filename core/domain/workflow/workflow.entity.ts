@@ -1,4 +1,5 @@
 import { WorkflowStatus } from './workflow-status.value-object';
+import { WorkflowFactoryData } from './workflow.factory';
 
 export class Workflow {
   private readonly id: string;
@@ -87,7 +88,7 @@ export class Workflow {
     this.updatedAt = new Date();
   }
 
-  toJSON() {
+  toJSON(): WorkflowFactoryData {
     return Object.freeze({
       id: this.id,
       userId: this.userId,

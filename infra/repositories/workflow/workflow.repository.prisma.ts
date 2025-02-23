@@ -3,6 +3,7 @@ import { Workflow } from '@/core/domain/workflow/workflow.entity';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import { WorkflowFactory } from '@/core/domain/workflow/workflow.factory';
+import { WorkflowStatusType } from '@/core/domain/workflow/workflow-status.value-object';
 
 export class WorkflowRepositoryPrisma implements WorkflowRepository {
     async getAll(): Promise<Workflow[]> {
@@ -26,7 +27,7 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
             name: result.name,
             description: result.description ?? '',
             definition: result.definition,
-            status: result.status,
+            status: result.status as WorkflowStatusType,
             createdAt: result.createdAt,
             updatedAt: result.updatedAt,
         }));
@@ -52,6 +53,9 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
             throw new Error('Failed to create workflow');
         }
 
-        return WorkflowFactory.create({ ...result });
+        return WorkflowFactory.create({
+            ...result,
+            status: result.status as WorkflowStatusType,
+        });
     }
 }

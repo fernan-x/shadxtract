@@ -1,15 +1,15 @@
 import { Workflow } from './workflow.entity';
-import { WorkflowStatus } from './workflow-status.value-object';
+import { WorkflowStatus, WorkflowStatusType } from './workflow-status.value-object';
 
 export type WorkflowFactoryData = {
-    id?: string;
-    userId?: string;
-    name?: string;
-    description?: string | null;
-    definition?: string | null;
-    status?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+    id: string;
+    userId: string;
+    name: string;
+    description: string | null;
+    definition: string | null;
+    status: WorkflowStatusType;
+    createdAt: Date;
+    updatedAt: Date;
 };
 
 export class WorkflowFactory {

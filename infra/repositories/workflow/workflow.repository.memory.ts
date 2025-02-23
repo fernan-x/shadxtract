@@ -24,6 +24,16 @@ export class WorkflowRepositoryMemory implements WorkflowRepository {
             createdAt: new Date(),
             updatedAt: new Date(),
         }),
+        WorkflowFactory.create({
+            id: '3',
+            userId: '1',
+            name: 'Workflow 3',
+            description: 'This is another workflow',
+            definition: 'This is the definition',
+            status: 'draft',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        }),
     ];
 
     async getAll(): Promise<Workflow[]> {

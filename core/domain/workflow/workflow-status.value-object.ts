@@ -1,16 +1,16 @@
 export class WorkflowStatus {
-    private readonly value: string;
+    private readonly value: WorkflowStatusType;
 
-    private static readonly ALLOWED_STATUSES = ['draft', 'published'];
+    public static readonly ALLOWED_STATUSES = ['draft', 'published'] as const;
 
-    constructor(status: string) {
+    constructor(status: WorkflowStatusType) {
         if (!WorkflowStatus.ALLOWED_STATUSES.includes(status)) {
             throw new Error(`Invalid workflow status: ${status}`);
         }
         this.value = status;
     }
 
-    getValue(): string {
+    getValue(): WorkflowStatusType {
         return this.value;
     }
 
@@ -18,3 +18,5 @@ export class WorkflowStatus {
         return this.value === other.value;
     }
 }
+
+export type WorkflowStatusType = typeof WorkflowStatus.ALLOWED_STATUSES[number];
