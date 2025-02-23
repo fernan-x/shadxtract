@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { WorkflowFactory } from '@/core/domain/workflow/workflow.factory';
 
 export class WorkflowRepositoryPrisma implements WorkflowRepository {
-  async getAll(): Promise<Workflow[]> {
+    async getAll(): Promise<Workflow[]> {
         const { userId } = await auth();
         if (!userId) {
             throw new Error('User not authenticated');
@@ -30,5 +30,26 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
             createdAt: result.createdAt,
             updatedAt: result.updatedAt,
         }));
-  }
+    }
+
+    async create(name: string, description?: string): Promise<Workflow> {
+        const { userId } = await auth();
+        if (!userId) {
+            throw new Error('User not authenticated');
+        }
+
+        const workflow = WorkflowFactory.create({
+            userId,
+            name,
+            description,
+        });
+
+        // await prisma.workflow.create({
+        //     data: {
+        //         ...workflow,
+        //     },
+        // });
+
+        return workflow;
+    }
 }
