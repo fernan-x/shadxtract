@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/ui/components/ui/card';
 import { FileTextIcon, PlayIcon, ShuffleIcon } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
+import WorkflowActions from './workflow-actions';
 
 const statusColors: Record<WorkflowStatusType, string> = {
     draft: 'bg-yellow-400 text-yellow-600',
@@ -54,6 +55,7 @@ function WorkflowCard({ workflow }: { workflow: WorkflowFactoryData }) {
                         <ShuffleIcon size={16} />
                         Edit
                     </Link>
+                    <WorkflowActions />
                 </div>
             </CardContent>
         </Card>
