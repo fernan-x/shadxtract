@@ -54,7 +54,7 @@ function WorkflowCard({ workflow }: { workflow: WorkflowFactoryData }) {
                         <ShuffleIcon size={16} />
                         Edit
                     </Link>
-                    <WorkflowActions workflowName={workflow.name} />
+                    <WorkflowActions workflowName={workflow.name} workflowId={workflow.id}/>
                 </div>
             </CardContent>
         </Card>

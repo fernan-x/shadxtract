@@ -1,5 +1,6 @@
 'use client'
 
+import { DeleteWorkflow } from '@/ui/actions/DeleteWorkflow';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -9,19 +10,32 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from '@/ui/components/ui/alert-dialog';
 import { Input } from '@/ui/components/ui/input';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 type AlertDialogProps = {
     open: boolean;
     setOpen: (open: boolean) => void;
     workflowName: string;
+    workflowId: string;
 };
 
-function DeleteWorkflowDialog({open, setOpen, workflowName}: AlertDialogProps) {
+function DeleteWorkflowDialog({open, setOpen, workflowName, workflowId}: AlertDialogProps) {
     const [confirmText, setConfirmText] = useState('');
+
+    const deleteMutation = useMutation({
+        mutationFn: DeleteWorkflow,
+        onSuccess: () => {
+            toast.success('Workflow deleted successfully', { id: workflowId });
+            setConfirmText('');
+        },
+        onError: () => {
+            toast.error('Failed to delete workflow', { id: workflowId });
+        },
+    })
 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
@@ -42,7 +56,12 @@ function DeleteWorkflowDialog({open, setOpen, workflowName}: AlertDialogProps) {
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                         className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
-                        disabled={confirmText !== workflowName}
+                        disabled={confirmText !== workflowName || deleteMutation.isPending}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            toast.loading('Deleting workflow...', { id: workflowId });
+                            deleteMutation.mutate(workflowId)
+                        }}
                     >
                         Delete
                     </AlertDialogAction>
