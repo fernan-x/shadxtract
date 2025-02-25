@@ -1,6 +1,7 @@
+import { waitFor } from '@/lib/helpers/wait-for';
 import { getWorkflowByIdUseCase } from '@/providers/workflow.provider';
-import { auth } from '@clerk/nextjs/server';
 import React from 'react'
+import Editor from '../../_components/Editor';
 
 async function page({ params }: { params: { workflowId: string } }) {
     const { workflowId } = params;
@@ -11,7 +12,7 @@ async function page({ params }: { params: { workflowId: string } }) {
     }
 
     return (
-        <pre className='h-screen'>{JSON.stringify(worflow, null, 2)}</pre>
+        <Editor workflow={worflow} />
     )
 }
 
