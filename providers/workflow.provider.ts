@@ -3,6 +3,7 @@ import { GetWorkflowsUseCase } from '@/core/application/workflow/getWorkflows.us
 import { WorkflowRepositoryMemory } from '@/infra/repositories/workflow/workflow.repository.memory';
 import { CreateWorkflowUseCase } from '@/core/application/workflow/createWorkflow.usecase';
 import { DeleteWorkflowUseCase } from '@/core/application/workflow/deleteWorkflow.usecase';
+import { GetWorkflowByIdUseCase } from '@/core/application/workflow/getWorkflowById.usecase';
 
 // Instantiate repository
 // const workflowRepository = new WorkflowRepositoryPrisma();
@@ -12,3 +13,4 @@ const workflowRepository = new WorkflowRepositoryMemory();
 export const getWorkflowsUseCase = new GetWorkflowsUseCase(workflowRepository);
 export const createWorkflowUseCase = new CreateWorkflowUseCase(workflowRepository);
 export const deleteWorkflowUseCase = new DeleteWorkflowUseCase(workflowRepository);
+export const getWorkflowByIdUseCase = new GetWorkflowByIdUseCase(workflowRepository);

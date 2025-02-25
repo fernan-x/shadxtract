@@ -56,4 +56,8 @@ export class WorkflowRepositoryMemory implements WorkflowRepository {
     async delete(id: string): Promise<void> {
         this.workflows = this.workflows.filter((workflow) => workflow.getId() !== id);
     }
+
+    async get(id: string): Promise<Workflow | null> {
+        return this.workflows.find((workflow) => workflow.getId() === id) || null;
+    }
 }

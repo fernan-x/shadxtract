@@ -72,4 +72,27 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
             },
         });
     }
+
+    async get(id: string): Promise<Workflow | null> {
+        const { userId } = await auth();
+        if (!userId) {
+            throw new Error('User not authenticated');
+        }
+
+        const result = await prisma.workflow.findUnique({
+            where: {
+                id,
+                userId,
+            },
+        });
+
+        if (!result) {
+            return null;
+        }
+
+        return WorkflowFactory.create({
+            ...result,
+            status: result.status as WorkflowStatusType,
+        });
+    }
 }
