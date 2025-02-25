@@ -58,4 +58,18 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
             status: result.status as WorkflowStatusType,
         });
     }
+
+    async delete(id: string): Promise<void> {
+        const { userId } = await auth();
+        if (!userId) {
+            throw new Error('User not authenticated');
+        }
+
+        await prisma.workflow.delete({
+            where: {
+                id,
+                userId,
+            },
+        });
+    }
 }
