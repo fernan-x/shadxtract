@@ -4,8 +4,9 @@ import { Workflow } from '@/core/domain/workflow/workflow.entity'
 import React from 'react'
 import { ReactFlowProvider } from '@xyflow/react'
 import FlowEditor from './FlowEditor'
+import { WorkflowFactoryData } from '@/core/domain/workflow/workflow.factory'
 
-function Editor({ workflow }: { workflow: Workflow }) {
+function Editor({ workflow }: { workflow: WorkflowFactoryData }) {
   return (
     <ReactFlowProvider>
       <div className='flex flex-col h-full w-full overflow-hidden'>

@@ -8,12 +8,16 @@ import '@xyflow/react/dist/style.css'
 import { createFlowNode } from '@/lib/workflow/createFlowNode'
 import { TaskType } from '@/ui/types/app-node'
 import NodeComponent from './nodes/NodeComponent'
+import { WorkflowFactoryData } from '@/core/domain/workflow/workflow.factory'
 
 const nodeTypes = {
     ShadXTractNode: NodeComponent,
 }
 
-function FlowEditor({ workflow }: { workflow: Workflow }) {
+const snapGrid: [number, number] = [50, 50];
+const fitViewOptions = { padding: 2 };
+
+function FlowEditor({ workflow }: { workflow: WorkflowFactoryData }) {
     const [nodes, setNodes, onNodesChange] = useNodesState([
         createFlowNode(TaskType.LAUNCH_BROWSER),
     ]);
@@ -27,8 +31,12 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 nodeTypes={nodeTypes}
+                snapGrid={snapGrid}
+                snapToGrid
+                fitViewOptions={fitViewOptions}
+                fitView
             >
-                <Controls position='top-left' />
+                <Controls position='top-left' fitViewOptions={fitViewOptions} />
                 <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
             </ReactFlow>
         </main>

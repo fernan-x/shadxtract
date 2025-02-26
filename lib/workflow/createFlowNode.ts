@@ -4,6 +4,7 @@ export const createFlowNode = (nodeType: TaskType, position?: {x: number, y: num
     return {
         id: crypto.randomUUID(),
         type: 'ShadXTractNode',
+        dragHandle: '.drag-handle',
         data: {
             type: nodeType,
             inputs: {},

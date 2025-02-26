@@ -1,4 +1,3 @@
-import { waitFor } from '@/lib/helpers/wait-for';
 import { getWorkflowByIdUseCase } from '@/providers/workflow.provider';
 import React from 'react'
 import Editor from '../../_components/Editor';
@@ -12,7 +11,7 @@ async function page({ params }: { params: { workflowId: string } }) {
     }
 
     return (
-        <Editor workflow={worflow} />
+        <Editor workflow={worflow.toJSON()} />
     )
 }
 
