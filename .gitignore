@@ -5,6 +5,7 @@ dist-ssr
 *.local
 .env
 package-lock.json
+pnpm-lock.yaml
 .next
 
 # Editor directories and files
