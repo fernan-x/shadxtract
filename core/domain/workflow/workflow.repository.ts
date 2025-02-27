@@ -5,5 +5,5 @@ export interface WorkflowRepository {
     get(id: string): Promise<Workflow | null>;
     create(name: string, description?: string): Promise<Workflow>;
     delete(id: string): Promise<void>;
-    edit(id: string, definition: string): Promise<Workflow>;
+    update(id: string, definition: string): Promise<Workflow>;
 }

@@ -61,7 +61,7 @@ export class WorkflowRepositoryMemory implements WorkflowRepository {
         return this.workflows.find((workflow) => workflow.getId() === id) || null;
     }
 
-    async edit(id: string, definition: string): Promise<Workflow> {
+    async update(id: string, definition: string): Promise<Workflow> {
         const workflow = this.workflows.find((workflow) => workflow.getId() === id);
         if (!workflow) {
             throw new Error('Workflow not found');
