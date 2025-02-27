@@ -5,13 +5,15 @@ import TooltipWrapper from '@/ui/components/TooltipWrapper'
 import { Button } from '@/ui/components/ui/button'
 import { ChevronLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import SaveButton from './SaveButton'
 
 type TopBarProps = {
     title: string;
     subtitle?: string;
+    workflowId: string;
 }
 
-function TopBar({ title, subtitle }: TopBarProps) {
+function TopBar({ title, subtitle, workflowId }: TopBarProps) {
     const router = useRouter();
 
     return (
@@ -38,7 +40,7 @@ function TopBar({ title, subtitle }: TopBarProps) {
                 </div>
             </div>
             <div className='flex gap-1 flex-1 justify-end'>
-                {/* TODO: Add save button here */}
+                <SaveButton workflowId={workflowId} />
             </div>
         </header>
     );

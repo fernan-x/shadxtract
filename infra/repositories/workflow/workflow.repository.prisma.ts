@@ -5,7 +5,9 @@ import { prisma } from '@/lib/prisma';
 import { WorkflowFactory } from '@/core/domain/workflow/workflow.factory';
 import { WorkflowStatusType } from '@/core/domain/workflow/workflow-status.value-object';
 
-export class WorkflowRepositoryPrisma implements WorkflowRepository {
+// TODO: Implement WorkflowRepositoryPrisma
+// export class WorkflowRepositoryPrisma implements WorkflowRepository {
+export class WorkflowRepositoryPrisma {
     async getAll(): Promise<Workflow[]> {
         const { userId } = await auth();
         if (!userId) {
