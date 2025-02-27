@@ -1,7 +1,7 @@
 'use client'
 
 import { WorkflowStatusType } from '@/core/domain/workflow/workflow-status.value-object';
-import { WorkflowFactoryData } from '@/core/domain/workflow/workflow.factory';
+import { WorkflowType } from '@/core/domain/workflow/workflow.entity';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/ui/components/ui/button';
 import { Card, CardContent } from '@/ui/components/ui/card';
@@ -14,7 +14,7 @@ const statusColors: Record<WorkflowStatusType, string> = {
     published: 'bg-primary',
 };
 
-function WorkflowCard({ workflow }: { workflow: WorkflowFactoryData }) {
+function WorkflowCard({ workflow }: { workflow: WorkflowType }) {
     const isDraft = workflow.status === 'draft';
 
     return (

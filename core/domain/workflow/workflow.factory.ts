@@ -1,19 +1,8 @@
-import { Workflow } from './workflow.entity';
-import { WorkflowStatus, WorkflowStatusType } from './workflow-status.value-object';
-
-export type WorkflowFactoryData = {
-    id: string;
-    userId: string;
-    name: string;
-    description: string | null;
-    definition: string | null;
-    status: WorkflowStatusType;
-    createdAt: Date;
-    updatedAt: Date;
-};
+import { Workflow, WorkflowType } from './workflow.entity';
+import { WorkflowStatus } from './workflow-status.value-object';
 
 export class WorkflowFactory {
-  static create(data?: Partial<WorkflowFactoryData>): Workflow {
+  static create(data?: Partial<WorkflowType>): Workflow {
     return new Workflow(
       data?.id ?? '',
       data?.userId ?? '',

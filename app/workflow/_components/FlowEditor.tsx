@@ -8,7 +8,7 @@ import '@xyflow/react/dist/style.css'
 import { createFlowNode } from '@/lib/workflow/createFlowNode'
 import { TaskType } from '@/ui/types/app-node'
 import NodeComponent from './nodes/NodeComponent'
-import { WorkflowFactoryData } from '@/core/domain/workflow/workflow.factory'
+import { WorkflowType } from '@/core/domain/workflow/workflow.entity'
 
 const nodeTypes = {
     ShadXTractNode: NodeComponent,
@@ -17,7 +17,7 @@ const nodeTypes = {
 const snapGrid: [number, number] = [50, 50];
 const fitViewOptions = { padding: 2 };
 
-function FlowEditor({ workflow }: { workflow: WorkflowFactoryData }) {
+function FlowEditor({ workflow }: { workflow: WorkflowType }) {
     const [nodes, setNodes, onNodesChange] = useNodesState([
         createFlowNode(TaskType.LAUNCH_BROWSER),
     ]);

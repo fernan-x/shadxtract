@@ -1,5 +1,15 @@
-import { WorkflowStatus } from './workflow-status.value-object';
-import { WorkflowFactoryData } from './workflow.factory';
+import { WorkflowStatus, WorkflowStatusType } from './workflow-status.value-object';
+
+export type WorkflowType = {
+  id: string;
+  userId: string;
+  name: string;
+  description: string | null;
+  definition: string | null;
+  status: WorkflowStatusType;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export class Workflow {
   private readonly id: string;
@@ -39,56 +49,24 @@ export class Workflow {
     return this.id;
   }
 
-  getUserId(): string {
-    return this.userId;
-  }
-
-  getName(): string {
-    return this.name;
-  }
-
-  getDescription(): string | null {
-    return this.description;
-  }
-
   getDefinition(): string | null {
     return this.definition;
   }
 
-  getStatus(): WorkflowStatus {
-    return this.status;
-  }
-
-  getTimestamps() {
-    return {
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-    };
-  }
-
-  updateName(newName: string) {
-    if (!newName.trim()) throw new Error('Workflow name cannot be empty');
-    this.name = newName;
-    this.updatedAt = new Date();
-  }
-
-  updateDescription(newDescription: string | null = null) {
-    this.description = newDescription;
-    this.updatedAt = new Date();
-  }
-
-  updateStatus(newStatus: WorkflowStatus) {
-    this.status = newStatus;
-    this.updatedAt = new Date();
-  }
-
   updateDefinition(newDefinition: string) {
-    if (!newDefinition.trim()) throw new Error('Workflow definition cannot be empty');
+    if (!newDefinition.trim()) {
+      throw new Error('Workflow definition cannot be empty');
+    }
+
+    if (new WorkflowStatus('draft').equals(this.status)) {
+      throw new Error('Workflow definition can only be updated in draft status');
+    }
+
     this.definition = newDefinition;
     this.updatedAt = new Date();
   }
 
-  toJSON(): WorkflowFactoryData {
+  toJSON(): WorkflowType {
     return Object.freeze({
       id: this.id,
       userId: this.userId,
