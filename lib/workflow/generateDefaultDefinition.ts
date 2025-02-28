@@ -1,6 +1,7 @@
-import { AppNode, TaskType } from '@/ui/types/app-node';
+import { AppNode } from '@/ui/types/app-node';
 import { Edge } from '@xyflow/react';
 import { createFlowNode } from './createFlowNode';
+import { TaskType } from '@/ui/types/task';
 
 const initialDefinition: { nodes: AppNode[], edges: Edge[] } = {
     nodes: [],

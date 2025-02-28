@@ -1,9 +1,9 @@
-import { Input } from '@/ui/components/ui/input';
-import { AppNode, TaskInputType, TaskParamType } from '@/ui/types/app-node'
+import { AppNode } from '@/ui/types/app-node'
 import React, { useCallback } from 'react'
 import StringParamField from './param/StringParamField';
 import { useReactFlow } from '@xyflow/react';
 import BrowserInstanceParamField from './param/BrowserInstanceParamField';
+import { TaskInputType, TaskParamType } from '@/ui/types/task';
 
 function NodeParamField({ param, nodeId }: { param: TaskInputType, nodeId: string }) {
     const { updateNodeData, getNode } = useReactFlow();

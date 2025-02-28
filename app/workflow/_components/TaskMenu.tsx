@@ -3,7 +3,7 @@
 import React, { useCallback } from 'react'
 import { TaskRegistry } from '@/lib/workflow/task/registry'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/ui/components/ui/accordion'
-import { TaskType } from '@/ui/types/app-node'
+import { TaskType } from '@/ui/types/task'
 import { Button } from '@/ui/components/ui/button'
 
 export default function TaskMenu() {

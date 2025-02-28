@@ -1,4 +1,4 @@
-import { Task, TaskType } from '@/ui/types/app-node';
+import { Task, TaskType } from '@/ui/types/task';
 import { LaunchBrowserTask } from './launch-browser';
 import { PageToHtmlTask } from './page-to-html';
 

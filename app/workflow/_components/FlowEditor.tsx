@@ -5,12 +5,13 @@ import { addEdge, Background, BackgroundVariant, Connection, Controls, Edge, Rea
 
 import '@xyflow/react/dist/style.css'
 import { createFlowNode } from '@/lib/workflow/createFlowNode'
-import { AppNode, TaskType } from '@/ui/types/app-node'
+import { AppNode } from '@/ui/types/app-node'
 import NodeComponent from './nodes/NodeComponent'
 import { WorkflowType } from '@/core/domain/workflow/workflow.entity'
 import { useTheme } from 'next-themes'
 import useSystemColorScheme from '@/ui/hooks/use-system-color-scheme'
 import DeletableEdge from './nodes/edges/DeletableEdge'
+import { TaskType } from '@/ui/types/task'
 
 const nodeTypes = {
     ShadXTractNode: NodeComponent,

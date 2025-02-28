@@ -1,4 +1,4 @@
-import { Task, TaskParamType, TaskType } from '@/ui/types/app-node';
+import { Task, TaskParamType, TaskType } from '@/ui/types/task';
 import { GlobeIcon, LucideProps } from 'lucide-react';
 
 export const LaunchBrowserTask: Task = {
