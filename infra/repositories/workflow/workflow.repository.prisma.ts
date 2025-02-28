@@ -96,7 +96,25 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
         });
     }
 
-    update(id: string, definition: string): Promise<Workflow> {
-        throw new Error('Method not implemented.');
+    async update(id: string, definition: string): Promise<Workflow> {
+        const { userId } = await auth();
+        if (!userId) {
+            throw new Error('User not authenticated');
+        }
+
+        const result = await prisma.workflow.update({
+            where: {
+                id,
+                userId,
+            },
+            data: {
+                definition,
+            },
+        });
+
+        return WorkflowFactory.create({
+            ...result,
+            status: result.status as WorkflowStatusType,
+        });
     }
 }
