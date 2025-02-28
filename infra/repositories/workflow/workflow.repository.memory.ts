@@ -37,12 +37,13 @@ export class WorkflowRepositoryMemory implements WorkflowRepository {
         return this.workflows;
     }
 
-    async create(name: string, description?: string): Promise<Workflow> {
+    async create(name: string, definition: string, description?: string): Promise<Workflow> {
         const workflow = WorkflowFactory.create({
             id: `${this.workflows.length + 1}`,
             userId: '1',
             name,
             description,
+            definition,
         });
 
         this.workflows.push(workflow);

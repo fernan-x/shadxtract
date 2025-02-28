@@ -5,9 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { WorkflowFactory } from '@/core/domain/workflow/workflow.factory';
 import { WorkflowStatusType } from '@/core/domain/workflow/workflow-status.value-object';
 
-// TODO: Implement WorkflowRepositoryPrisma
-// export class WorkflowRepositoryPrisma implements WorkflowRepository {
-export class WorkflowRepositoryPrisma {
+export class WorkflowRepositoryPrisma implements WorkflowRepository {
     async getAll(): Promise<Workflow[]> {
         const { userId } = await auth();
         if (!userId) {
@@ -35,7 +33,7 @@ export class WorkflowRepositoryPrisma {
         }));
     }
 
-    async create(name: string, description: string | null = null): Promise<Workflow> {
+    async create(name: string, definition: string, description: string | null = null): Promise<Workflow> {
         const { userId } = await auth();
         if (!userId) {
             throw new Error('User not authenticated');
@@ -47,7 +45,7 @@ export class WorkflowRepositoryPrisma {
                 name,
                 description,
                 status: 'draft',
-                definition: '',
+                definition,
             },
         });
 
@@ -96,5 +94,9 @@ export class WorkflowRepositoryPrisma {
             ...result,
             status: result.status as WorkflowStatusType,
         });
+    }
+
+    update(id: string, definition: string): Promise<Workflow> {
+        throw new Error('Method not implemented.');
     }
 }

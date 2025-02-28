@@ -7,8 +7,8 @@ import { GetWorkflowByIdUseCase } from '@/core/application/workflow/getWorkflowB
 import { UpdateWorkflowUseCase } from '@/core/application/workflow/updateWorkflow.usecase';
 
 // Instantiate repository
-// const workflowRepository = new WorkflowRepositoryPrisma();
-const workflowRepository = new WorkflowRepositoryMemory();
+const workflowRepository = new WorkflowRepositoryPrisma();
+// const workflowRepository = new WorkflowRepositoryMemory();
 
 // Instantiate use case with repository
 export const getWorkflowsUseCase = new GetWorkflowsUseCase(workflowRepository);
