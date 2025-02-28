@@ -27,7 +27,7 @@ const fitViewOptions = { padding: 2 };
 function FlowEditor({ workflow }: { workflow: WorkflowType }) {
     const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-    const {setViewport, screenToFlowPosition} = useReactFlow();
+    const {setViewport, screenToFlowPosition, updateNodeData} = useReactFlow();
 
     const { theme } = useTheme();
     const systemColorScheme = useSystemColorScheme();
@@ -67,7 +67,16 @@ function FlowEditor({ workflow }: { workflow: WorkflowType }) {
 
     const onConnect = useCallback((connection: Connection) => {
         setEdges(eds => addEdge({...connection, animated: true}, eds));
-    }, [setEdges]);
+        if (!connection.target) return;
+
+        const node = nodes.find(n => n.id === connection.target);
+        if (!node) return;
+        console.log(node);
+
+        const { inputs } = node.data;
+        delete inputs[connection.target];
+        updateNodeData(node.id, { inputs });
+    }, [nodes, setEdges, updateNodeData]);
 
     return (
         <main className='h-full w-full'>

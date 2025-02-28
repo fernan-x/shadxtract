@@ -2,8 +2,8 @@
 
 import { Input } from '@/ui/components/ui/input';
 import { Label } from '@/ui/components/ui/label'
-import { TaskInputType } from '@/ui/types/app-node';
-import React, { useId, useState } from 'react'
+import { TaskInputType } from '@/ui/types/task';
+import React, { useEffect, useId, useState } from 'react'
 
 export type BaseParamFieldProps = {
   param: TaskInputType;
@@ -14,6 +14,10 @@ export type BaseParamFieldProps = {
 function StringParamField({ param, value, onChange }: BaseParamFieldProps) {
   const [internalValue, setInternalValue] = useState(value);
   const id = useId();
+
+  useEffect(() => {
+    setInternalValue(value);
+  }, [value]);
 
   return (
     <div className='space-y-1 p-1 w-full'>
