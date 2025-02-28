@@ -67,15 +67,16 @@ function FlowEditor({ workflow }: { workflow: WorkflowType }) {
 
     const onConnect = useCallback((connection: Connection) => {
         setEdges(eds => addEdge({...connection, animated: true}, eds));
-        if (!connection.target) return;
+        if (!connection.target || !connection.targetHandle) return;
 
         const node = nodes.find(n => n.id === connection.target);
         if (!node) return;
-        console.log(node);
 
         const { inputs } = node.data;
-        delete inputs[connection.target];
-        updateNodeData(node.id, { inputs });
+        updateNodeData(node.id, { inputs: {
+            ...inputs,
+            [connection.targetHandle]: '',
+        } });
     }, [nodes, setEdges, updateNodeData]);
 
     return (
