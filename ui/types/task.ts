@@ -33,4 +33,5 @@ export type Task = {
     isEntryPoint?: boolean;
     inputs: TaskInputType[];
     outputs: TaskOutputType[];
+    credits: number;
 }
