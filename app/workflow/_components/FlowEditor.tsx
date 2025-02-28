@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback, useEffect } from 'react'
-import { Background, BackgroundVariant, Controls, ReactFlow, useEdgesState, useNodesState, useReactFlow } from '@xyflow/react'
+import { addEdge, Background, BackgroundVariant, Connection, Controls, Edge, ReactFlow, useEdgesState, useNodesState, useReactFlow } from '@xyflow/react'
 
 import '@xyflow/react/dist/style.css'
 import { createFlowNode } from '@/lib/workflow/createFlowNode'
@@ -10,9 +10,14 @@ import NodeComponent from './nodes/NodeComponent'
 import { WorkflowType } from '@/core/domain/workflow/workflow.entity'
 import { useTheme } from 'next-themes'
 import useSystemColorScheme from '@/ui/hooks/use-system-color-scheme'
+import DeletableEdge from './nodes/edges/DeletableEdge'
 
 const nodeTypes = {
     ShadXTractNode: NodeComponent,
+}
+
+const edgeTypes = {
+    default: DeletableEdge,
 }
 
 const snapGrid: [number, number] = [50, 50];
@@ -20,7 +25,7 @@ const fitViewOptions = { padding: 2 };
 
 function FlowEditor({ workflow }: { workflow: WorkflowType }) {
     const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
     const {setViewport, screenToFlowPosition} = useReactFlow();
 
     const { theme } = useTheme();
@@ -59,6 +64,10 @@ function FlowEditor({ workflow }: { workflow: WorkflowType }) {
         setNodes((nds) => nds.concat(node));
     }, [screenToFlowPosition, setNodes]);
 
+    const onConnect = useCallback((connection: Connection) => {
+        setEdges(eds => addEdge({...connection, animated: true}, eds));
+    }, [setEdges]);
+
     return (
         <main className='h-full w-full'>
             <ReactFlow
@@ -67,6 +76,7 @@ function FlowEditor({ workflow }: { workflow: WorkflowType }) {
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
                 snapGrid={snapGrid}
                 snapToGrid
                 fitViewOptions={fitViewOptions}
@@ -74,6 +84,7 @@ function FlowEditor({ workflow }: { workflow: WorkflowType }) {
                 onDragOver={onDragOver}
                 onDrop={onDrop}
                 colorMode={colorMode}
+                onConnect={onConnect}
             >
                 <Controls
                     position='top-left'
