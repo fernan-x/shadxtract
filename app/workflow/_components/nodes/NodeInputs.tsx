@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import { TaskInputType } from '@/ui/types/app-node';
 import { Handle, Position } from '@xyflow/react';
 import NodeParamField from './NodeParamField';
+import { ColorForHandle } from './common';
 
 export function NodeInputs({ children }: { children: React.ReactNode }) {
     return (
@@ -21,7 +22,8 @@ export function NodeInput({ input, nodeId }: { input: TaskInputType, nodeId: str
                     type='target'
                     position={Position.Left}
                     className={cn(
-                        '!bg-muted-foreground !border-2 !border-background !-left-2 !w-4 !h-4'
+                        '!bg-muted-foreground !border-2 !border-background !-left-2 !w-4 !h-4',
+                        ColorForHandle[input.type],
                     )}
                 />
             )}

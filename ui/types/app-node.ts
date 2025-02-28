@@ -20,12 +20,19 @@ export type TaskInputType = {
     [key: string]: unknown;
 }
 
+export type TaskOutputType = {
+    name: string;
+    type: TaskParamType;
+    [key: string]: unknown;
+}
+
 export type Task = {
     type: TaskType;
     label: string;
     icon: (props: LucideProps) => JSX.Element;
     isEntryPoint?: boolean;
     inputs: TaskInputType[];
+    outputs: TaskOutputType[];
 }
 
 export type AppNodeData = {

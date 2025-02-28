@@ -4,6 +4,7 @@ services:
     environment:
       NODE_ENV: development
       WATCHPACK_POLLING: true
+      NEXTJS_DISABLE_CACHE: true
     volumes:
       - .:/app
       - /app/node_modules
