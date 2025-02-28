@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  app:
+    environment:
+      NODE_ENV: development
+      WATCHPACK_POLLING: true
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: ["sh", "-c", "pnpm prisma generate && pnpm dev"]
