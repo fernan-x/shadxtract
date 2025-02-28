@@ -5,14 +5,15 @@ ShadXtract is an AI-powered, no-code web scraping tool that lets you visually de
 ### Docker
 
 ```bash
-docker build -t shadxtract .
-docker run -p 3000:3000 shadxtract
+cp .env.example .env.docker
+docker-compose --env-file .env.docker up -d --build
 ```
 
 ### Without Docker
 
 ```bash
 pnpm install
+cp .env.example .env
 pnpm prisma generate && pnpm prisma migrate deploy
 ```
 
