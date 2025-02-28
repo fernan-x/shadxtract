@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback, useEffect } from 'react'
-import { addEdge, Background, BackgroundVariant, Connection, Controls, Edge, ReactFlow, useEdgesState, useNodesState, useReactFlow } from '@xyflow/react'
+import { addEdge, Background, BackgroundVariant, Connection, Controls, Edge, getOutgoers, ReactFlow, useEdgesState, useNodesState, useReactFlow } from '@xyflow/react'
 
 import '@xyflow/react/dist/style.css'
 import { createFlowNode } from '@/lib/workflow/createFlowNode'
@@ -12,6 +12,7 @@ import { useTheme } from 'next-themes'
 import useSystemColorScheme from '@/ui/hooks/use-system-color-scheme'
 import DeletableEdge from './nodes/edges/DeletableEdge'
 import { TaskType } from '@/ui/types/task'
+import { TaskRegistry } from '@/lib/workflow/task/registry'
 
 const nodeTypes = {
     ShadXTractNode: NodeComponent,
@@ -79,6 +80,45 @@ function FlowEditor({ workflow }: { workflow: WorkflowType }) {
         } });
     }, [nodes, setEdges, updateNodeData]);
 
+    const isValidConnection = useCallback((connection: Edge | Connection) => {
+        // No self connections allowed
+        if (connection.source === connection.target) return false;
+
+        // Same taks param type connections not allowed
+        const sourceNode = nodes.find(n => n.id === connection.source);
+        const targetNode = nodes.find(n => n.id === connection.target);
+        if (!sourceNode || !targetNode) {
+            console.error('Invalid connection: source or target node not found');
+            return false;
+        }
+
+        const sourceTask = TaskRegistry[sourceNode.data.type];
+        const targetTask = TaskRegistry[targetNode.data.type];
+
+        const output = sourceTask.outputs.find(o => o.name === connection.sourceHandle);
+        const input = targetTask.inputs.find(o => o.name === connection.targetHandle);
+
+        if (input?.type !== output?.type) {
+            console.error('Invalid connection: input and output types do not match');
+            return false;
+        }
+
+        const hasCycle = (node: AppNode, visited = new Set()): boolean => {
+            if (visited.has(node.id)) return false;
+            visited.add(node.id);
+
+            for (const outgoer of getOutgoers(node, nodes, edges)) {
+                if (outgoer.id === connection.source) return true;
+                if (hasCycle(outgoer, visited)) return true;
+            }
+
+            return false;
+        }
+
+        const detectedCycle = hasCycle(targetNode, new Set());
+        return !detectedCycle;
+    }, [edges, nodes]);
+
     return (
         <main className='h-full w-full'>
             <ReactFlow
@@ -96,6 +136,7 @@ function FlowEditor({ workflow }: { workflow: WorkflowType }) {
                 onDrop={onDrop}
                 colorMode={colorMode}
                 onConnect={onConnect}
+                isValidConnection={isValidConnection}
             >
                 <Controls
                     position='top-left'
