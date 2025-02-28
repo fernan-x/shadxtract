@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useCallback, useEffect } from 'react'
-import { Workflow } from '@/core/domain/workflow/workflow.entity'
 import { Background, BackgroundVariant, Controls, ReactFlow, useEdgesState, useNodesState, useReactFlow } from '@xyflow/react'
 
 import '@xyflow/react/dist/style.css'
@@ -9,6 +8,8 @@ import { createFlowNode } from '@/lib/workflow/createFlowNode'
 import { AppNode, TaskType } from '@/ui/types/app-node'
 import NodeComponent from './nodes/NodeComponent'
 import { WorkflowType } from '@/core/domain/workflow/workflow.entity'
+import { useTheme } from 'next-themes'
+import useSystemColorScheme from '@/ui/hooks/use-system-color-scheme'
 
 const nodeTypes = {
     ShadXTractNode: NodeComponent,
@@ -21,6 +22,10 @@ function FlowEditor({ workflow }: { workflow: WorkflowType }) {
     const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const {setViewport, screenToFlowPosition} = useReactFlow();
+
+    const { theme } = useTheme();
+    const systemColorScheme = useSystemColorScheme();
+    const colorMode = theme === 'dark' ? 'dark' : (theme === 'system' ? systemColorScheme : 'light');
 
     useEffect(() => {
         try {
@@ -68,8 +73,12 @@ function FlowEditor({ workflow }: { workflow: WorkflowType }) {
                 fitView
                 onDragOver={onDragOver}
                 onDrop={onDrop}
+                colorMode={colorMode}
             >
-                <Controls position='top-left' fitViewOptions={fitViewOptions} />
+                <Controls
+                    position='top-left'
+                    fitViewOptions={fitViewOptions}
+                />
                 <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
             </ReactFlow>
         </main>
