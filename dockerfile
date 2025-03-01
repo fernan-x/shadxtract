@@ -8,13 +8,15 @@ RUN apk add --no-cache libc6-compat curl
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile
 
 # Build the application
 FROM base AS builder
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN corepack enable && pnpm prisma generate && pnpm build
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+RUN corepack enable && pnpm exec prisma generate && pnpm build
 
 # Run the production build
 FROM base AS runner
