@@ -6,7 +6,6 @@ dist-ssr
 .env
 .env.docker
 package-lock.json
-pnpm-lock.yaml
 .next
 
 # Editor directories and files
