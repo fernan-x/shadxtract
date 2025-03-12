@@ -8,3 +8,8 @@ export type AppNodeData = {
 }
 
 export type AppNode = Node<AppNodeData>;
+
+export type AppNodeInvalidInputs = {
+    nodeId: string;
+    invalidInputs: string[];
+}
