@@ -14,7 +14,7 @@ export type BaseParamFieldProps = {
 }
 
 function StringParamField({ param, value, onChange, disabled }: BaseParamFieldProps) {
-  const [internalValue, setInternalValue] = useState(value);
+  const [internalValue, setInternalValue] = useState(value ?? '');
   const id = useId();
 
   useEffect(() => {
