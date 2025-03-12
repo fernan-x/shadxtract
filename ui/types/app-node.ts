@@ -7,6 +7,4 @@ export type AppNodeData = {
     [key: string]: unknown;
 }
 
-export type AppNode = Node & {
-    data: AppNodeData;
-}
+export type AppNode = Node<AppNodeData>;
