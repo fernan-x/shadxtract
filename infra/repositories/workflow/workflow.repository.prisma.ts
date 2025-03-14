@@ -1,9 +1,8 @@
 import { WorkflowRepository } from '@/core/domain/workflow/workflow.repository';
-import { Workflow } from '@/core/domain/workflow/workflow.entity';
+import { Workflow, WorkflowStatus } from '@/core/domain/workflow/workflow.entity';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import { WorkflowFactory } from '@/core/domain/workflow/workflow.factory';
-import { WorkflowStatusType } from '@/core/domain/workflow/workflow-status.value-object';
 
 export class WorkflowRepositoryPrisma implements WorkflowRepository {
     async getAll(): Promise<Workflow[]> {
@@ -27,7 +26,7 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
             name: result.name,
             description: result.description ?? '',
             definition: result.definition,
-            status: result.status as WorkflowStatusType,
+            status: result.status as WorkflowStatus,
             createdAt: result.createdAt,
             updatedAt: result.updatedAt,
         }));
@@ -55,7 +54,7 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
 
         return WorkflowFactory.create({
             ...result,
-            status: result.status as WorkflowStatusType,
+            status: result.status as WorkflowStatus,
         });
     }
 
@@ -92,7 +91,7 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
 
         return WorkflowFactory.create({
             ...result,
-            status: result.status as WorkflowStatusType,
+            status: result.status as WorkflowStatus,
         });
     }
 
@@ -114,7 +113,7 @@ export class WorkflowRepositoryPrisma implements WorkflowRepository {
 
         return WorkflowFactory.create({
             ...result,
-            status: result.status as WorkflowStatusType,
+            status: result.status as WorkflowStatus,
         });
     }
 }

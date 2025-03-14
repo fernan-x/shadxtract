@@ -13,5 +13,5 @@ export async function CreateWorkflow(form: z.infer<typeof createWorkflowSchema>)
     }
 
     const result = await createWorkflowUseCase.execute(data.name, data.description);
-    redirect(`/workflow/editor/${result.getId()}`);
+    redirect(`/workflow/editor/${result.id}`);
 }

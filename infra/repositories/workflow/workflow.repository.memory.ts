@@ -52,20 +52,20 @@ export class WorkflowRepositoryMemory implements WorkflowRepository {
     }
 
     async delete(id: string): Promise<void> {
-        this.workflows = this.workflows.filter((workflow) => workflow.getId() !== id);
+        this.workflows = this.workflows.filter((workflow) => workflow.id !== id);
     }
 
     async get(id: string): Promise<Workflow | null> {
-        return this.workflows.find((workflow) => workflow.getId() === id) || null;
+        return this.workflows.find((workflow) => workflow.id === id) || null;
     }
 
     async update(id: string, definition: string): Promise<Workflow> {
-        const workflow = this.workflows.find((workflow) => workflow.getId() === id);
+        const workflow = this.workflows.find((workflow) => workflow.id === id);
         if (!workflow) {
             throw new Error('Workflow not found');
         }
 
-        workflow.updateDefinition(definition);
+        workflow.definition = definition;
 
         return workflow;
     }

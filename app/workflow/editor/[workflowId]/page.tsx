@@ -11,7 +11,7 @@ async function page({ params }: { params: { workflowId: string } }) {
     }
 
     return (
-        <Editor workflow={worflow.toJSON()} />
+        <Editor workflow={worflow} />
     )
 }
 
