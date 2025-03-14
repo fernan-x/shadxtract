@@ -9,6 +9,10 @@ export class UpdateWorkflowUseCase {
             throw new Error('Workflow not found');
         }
 
+        if (workflow.status !== 'draft') {
+            throw new Error('Cannot update workflow with status other than draft');
+        }
+
         await this.workflowRepository.update(id, definition);
     }
 }

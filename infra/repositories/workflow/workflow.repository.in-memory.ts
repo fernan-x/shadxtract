@@ -2,7 +2,7 @@ import { Workflow } from '@/core/domain/workflow/workflow.entity';
 import { WorkflowFactory } from '@/core/domain/workflow/workflow.factory';
 import { WorkflowRepository } from '@/core/domain/workflow/workflow.repository';
 
-export class WorkflowRepositoryMemory implements WorkflowRepository {
+export class WorkflowRepositoryInMemory implements WorkflowRepository {
     private workflows: Workflow[] = [
         WorkflowFactory.create({
             id: '1',
