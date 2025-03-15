@@ -1,9 +1,9 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
 import { ExecutionPlan } from '../types/execution-plan';
 import { flowToExecutionPlan } from '@/lib/workflow/executionPlan';
+import { getWorkflowByIdUseCase } from '@/providers/workflow.provider';
 
 export async function runWorkflow(form: { workflowId: string, flowDefinition?: string }) {
     const { userId } = await auth();
@@ -16,13 +16,7 @@ export async function runWorkflow(form: { workflowId: string, flowDefinition?: s
         throw new Error('Workflow ID is required');
     }
 
-    // TODO : Create a usecase for this
-    const workflow = await prisma.workflow.findUnique({
-        where: {
-            userId,
-            id: workflowId
-        }
-    });
+    const workflow = await getWorkflowByIdUseCase.execute(workflowId);
 
     if (!workflow) {
         throw new Error('Workflow not found');
