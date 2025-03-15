@@ -1,6 +1,6 @@
 import { AppNode, AppNodeInvalidInputs } from '@/ui/types/app-node';
 import { ExecutionPlan, ExecutionPlanPhase } from '@/ui/types/execution-plan';
-import { Edge, getIncomers } from '@xyflow/react';
+import { Edge } from '@xyflow/react';
 import { TaskRegistry } from './task/registry';
 
 export enum FlowToExecutionPlanValidationError {
@@ -121,4 +121,18 @@ const getInvalidInputs = (node: AppNode, edges: Edge[], planned: Set<string>): s
     }
 
     return invalidInputs;
+}
+
+function getIncomers(node: AppNode, nodes: AppNode[], edges: Edge[]): AppNode[] {
+    if (!node.id) {
+        return [];
+    }
+    const incomersIds = new Set();
+    edges.forEach(edge => {
+        if (edge.target === node.id) {
+            incomersIds.add(edge.source);
+        }
+    });
+
+    return nodes.filter(n => incomersIds.has(n.id));
 }
