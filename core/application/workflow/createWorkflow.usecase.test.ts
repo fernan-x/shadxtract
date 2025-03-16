@@ -3,7 +3,7 @@ import { WorkflowRepository } from '@/core/domain/workflow/workflow.repository';
 import { WorkflowRepositoryInMemory } from '@/infra/repositories/workflow/workflow.repository.in-memory';
 import { generateDefaultDefinition } from '@/lib/workflow/generateDefaultDefinition';
 
-describe('CreateWorkflowUseCase', () => {
+describe('USECASE: CreateWorkflowUseCase', () => {
     let useCase: CreateWorkflowUseCase;
     let inMemoryRepository: WorkflowRepository;
 
