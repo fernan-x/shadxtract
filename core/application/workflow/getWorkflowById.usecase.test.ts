@@ -12,7 +12,7 @@ describe('USECASE: GetWorkflowByIdUseCase', () => {
     });
 
     it('should get a workflow by id', async () => {
-        const workflow = await inMemoryRepository.get('1');
+        const workflow = await useCase.execute('1');
         expect(workflow).toBeDefined();
         expect(workflow?.id).toBe('1');
     });

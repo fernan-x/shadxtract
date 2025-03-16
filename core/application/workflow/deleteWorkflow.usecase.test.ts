@@ -15,7 +15,7 @@ describe('USECASE: DeleteWorkflowUseCase', () => {
 
     it('should delete a workflow', async () => {
         const workflowId = '1';
-        await inMemoryRepository.delete(workflowId);
+        await useCase.execute(workflowId);
         const workflows = await inMemoryRepository.getAll();
 
         expect(workflows.length).toBe(defaultRepositoryLenght - 1);
