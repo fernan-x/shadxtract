@@ -20,3 +20,22 @@ export type Workflow = {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export enum WorkflowExecutionStatus {
+  PENDING = 'PENDING',
+  RUNNING = 'RUNNING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+}
+
+export enum WorkflowExecutionTrigger {
+  MANUAL = 'MANUAL',
+}
+
+export enum ExecutionPhaseStatus {
+  CREATED = 'CREATED',
+  PENDING = 'PENDING',
+  RUNNING = 'RUNNING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+}
