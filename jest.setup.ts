@@ -1,8 +1,8 @@
-import '@testing-library/jest-dom'
-import { randomUUID } from 'crypto';
+import "@testing-library/jest-dom";
+import { randomUUID } from "crypto";
 
-Object.defineProperty(global, 'crypto', {
+Object.defineProperty(global, "crypto", {
   value: {
-    randomUUID: randomUUID
-  }
+    randomUUID: randomUUID,
+  },
 });

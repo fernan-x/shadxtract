@@ -1,5 +1,5 @@
-import { Workflow } from '@/core/domain/workflow/workflow.entity';
-import { WorkflowRepository } from '@/core/domain/workflow/workflow.repository';
+import { Workflow } from "@/core/domain/workflow/workflow.entity";
+import { WorkflowRepository } from "@/core/domain/workflow/workflow.repository";
 
 export class GetWorkflowsUseCase {
   constructor(private repository: WorkflowRepository) {}

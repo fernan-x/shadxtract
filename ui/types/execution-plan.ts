@@ -1,8 +1,8 @@
-import { AppNode } from './app-node';
+import { AppNode } from "./app-node";
 
 export type ExecutionPlan = ExecutionPlanPhase[];
 
 export type ExecutionPlanPhase = {
-    phase: number;
-    nodes: AppNode[];
-}
+  phase: number;
+  nodes: AppNode[];
+};

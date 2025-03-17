@@ -1,119 +1,128 @@
-import { WorkflowRepository } from '@/core/domain/workflow/workflow.repository';
-import { Workflow, WorkflowStatus } from '@/core/domain/workflow/workflow.entity';
-import { auth } from '@clerk/nextjs/server';
-import { prisma } from '@/lib/prisma';
-import { WorkflowFactory } from '@/core/domain/workflow/workflow.factory';
+import { WorkflowRepository } from "@/core/domain/workflow/workflow.repository";
+import {
+  Workflow,
+  WorkflowStatus,
+} from "@/core/domain/workflow/workflow.entity";
+import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
+import { WorkflowFactory } from "@/core/domain/workflow/workflow.factory";
 
 export class WorkflowRepositoryPrisma implements WorkflowRepository {
-    async getAll(): Promise<Workflow[]> {
-        const { userId } = await auth();
-        if (!userId) {
-            throw new Error('User not authenticated');
-        }
-
-        const results = await prisma.workflow.findMany({
-            where: {
-                userId,
-            },
-            orderBy: {
-                createdAt: 'asc',
-            },
-        });
-
-        return results.map((result) => WorkflowFactory.create({
-            id: result.id,
-            userId: result.userId,
-            name: result.name,
-            description: result.description ?? '',
-            definition: result.definition,
-            status: result.status as WorkflowStatus,
-            createdAt: result.createdAt,
-            updatedAt: result.updatedAt,
-        }));
+  async getAll(): Promise<Workflow[]> {
+    const { userId } = await auth();
+    if (!userId) {
+      throw new Error("User not authenticated");
     }
 
-    async create(name: string, definition: string, description: string | null = null): Promise<Workflow> {
-        const { userId } = await auth();
-        if (!userId) {
-            throw new Error('User not authenticated');
-        }
+    const results = await prisma.workflow.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
 
-        const result = await prisma.workflow.create({
-            data: {
-                userId,
-                name,
-                description,
-                status: 'draft',
-                definition,
-            },
-        });
+    return results.map((result) =>
+      WorkflowFactory.create({
+        id: result.id,
+        userId: result.userId,
+        name: result.name,
+        description: result.description ?? "",
+        definition: result.definition,
+        status: result.status as WorkflowStatus,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+      }),
+    );
+  }
 
-        if (!result) {
-            throw new Error('Failed to create workflow');
-        }
-
-        return WorkflowFactory.create({
-            ...result,
-            status: result.status as WorkflowStatus,
-        });
+  async create(
+    name: string,
+    definition: string,
+    description: string | null = null,
+  ): Promise<Workflow> {
+    const { userId } = await auth();
+    if (!userId) {
+      throw new Error("User not authenticated");
     }
 
-    async delete(id: string): Promise<void> {
-        const { userId } = await auth();
-        if (!userId) {
-            throw new Error('User not authenticated');
-        }
+    const result = await prisma.workflow.create({
+      data: {
+        userId,
+        name,
+        description,
+        status: "draft",
+        definition,
+      },
+    });
 
-        await prisma.workflow.delete({
-            where: {
-                id,
-                userId,
-            },
-        });
+    if (!result) {
+      throw new Error("Failed to create workflow");
     }
 
-    async get(id: string): Promise<Workflow | null> {
-        const { userId } = await auth();
-        if (!userId) {
-            throw new Error('User not authenticated');
-        }
+    return WorkflowFactory.create({
+      ...result,
+      status: result.status as WorkflowStatus,
+    });
+  }
 
-        const result = await prisma.workflow.findUnique({
-            where: {
-                id,
-                userId,
-            },
-        });
-
-        if (!result) {
-            return null;
-        }
-
-        return WorkflowFactory.create({
-            ...result,
-            status: result.status as WorkflowStatus,
-        });
+  async delete(id: string): Promise<void> {
+    const { userId } = await auth();
+    if (!userId) {
+      throw new Error("User not authenticated");
     }
 
-    async update(id: string, definition: string): Promise<Workflow> {
-        const { userId } = await auth();
-        if (!userId) {
-            throw new Error('User not authenticated');
-        }
+    await prisma.workflow.delete({
+      where: {
+        id,
+        userId,
+      },
+    });
+  }
 
-        const result = await prisma.workflow.update({
-            where: {
-                id,
-                userId,
-            },
-            data: {
-                definition,
-            },
-        });
-
-        return WorkflowFactory.create({
-            ...result,
-            status: result.status as WorkflowStatus,
-        });
+  async get(id: string): Promise<Workflow | null> {
+    const { userId } = await auth();
+    if (!userId) {
+      throw new Error("User not authenticated");
     }
+
+    const result = await prisma.workflow.findUnique({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    return WorkflowFactory.create({
+      ...result,
+      status: result.status as WorkflowStatus,
+    });
+  }
+
+  async update(id: string, definition: string): Promise<Workflow> {
+    const { userId } = await auth();
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
+    const result = await prisma.workflow.update({
+      where: {
+        id,
+        userId,
+      },
+      data: {
+        definition,
+      },
+    });
+
+    return WorkflowFactory.create({
+      ...result,
+      status: result.status as WorkflowStatus,
+    });
+  }
 }

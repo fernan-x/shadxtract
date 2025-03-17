@@ -54,7 +54,6 @@ jobs:
           outputs: type=image
           provenance: false
 
-
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
@@ -64,4 +63,4 @@ jobs:
 
       - name: Deploy to Coolify
         run: |
-         curl --request GET '${{ secrets.COOLIFY_WEBHOOK }}' --header 'Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}'
+          curl --request GET '${{ secrets.COOLIFY_WEBHOOK }}' --header 'Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}'

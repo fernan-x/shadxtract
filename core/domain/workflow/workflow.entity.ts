@@ -8,7 +8,7 @@
  * - Created and updated dates default to current date if not provided
  */
 
-export type WorkflowStatus = 'draft' | 'published';
+export type WorkflowStatus = "draft" | "published";
 
 export type Workflow = {
   id: string;
@@ -19,23 +19,23 @@ export type Workflow = {
   status: WorkflowStatus;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 export enum WorkflowExecutionStatus {
-  PENDING = 'PENDING',
-  RUNNING = 'RUNNING',
-  COMPLETED = 'COMPLETED',
-  FAILED = 'FAILED',
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
 }
 
 export enum WorkflowExecutionTrigger {
-  MANUAL = 'MANUAL',
+  MANUAL = "MANUAL",
 }
 
 export enum ExecutionPhaseStatus {
-  CREATED = 'CREATED',
-  PENDING = 'PENDING',
-  RUNNING = 'RUNNING',
-  COMPLETED = 'COMPLETED',
-  FAILED = 'FAILED',
+  CREATED = "CREATED",
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
 }

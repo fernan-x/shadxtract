@@ -1,15 +1,16 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { AppProviders } from '@/ui/components/providers/AppProviders';
-import { ClerkProvider } from '@clerk/nextjs';
-import { Toaster } from '@/ui/components/ui/sonner';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { AppProviders } from "@/ui/components/providers/AppProviders";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/ui/components/ui/sonner";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'ShadXtract',
-  description: 'ShadXtract is an AI-powered, no-code web scraping tool that lets you visually design and automate data extraction with a simple drag-and-drop interface. Extract structured data from websites effortlessly—no coding required!',
+  title: "ShadXtract",
+  description:
+    "ShadXtract is an AI-powered, no-code web scraping tool that lets you visually design and automate data extraction with a simple drag-and-drop interface. Extract structured data from websites effortlessly—no coding required!",
 };
 
 export default function RootLayout({
@@ -19,18 +20,17 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
-      afterSignOutUrl='/sign-in'
+      afterSignOutUrl="/sign-in"
       appearance={{
         elements: {
-          formButtonPrimary: 'bg-primary hover:bg-primary/90 text-sm !shadow-none',
+          formButtonPrimary:
+            "bg-primary hover:bg-primary/90 text-sm !shadow-none",
         },
       }}
     >
       <html lang="en">
         <body className={inter.className}>
-          <AppProviders>
-            {children}
-          </AppProviders>
+          <AppProviders>{children}</AppProviders>
           <Toaster richColors />
         </body>
       </html>
