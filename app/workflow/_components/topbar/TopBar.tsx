@@ -12,9 +12,10 @@ type TopBarProps = {
     title: string;
     subtitle?: string;
     workflowId: string;
+    hideButtons?: boolean;
 }
 
-function TopBar({ title, subtitle, workflowId }: TopBarProps) {
+function TopBar({ title, subtitle, workflowId, hideButtons = false }: TopBarProps) {
     const router = useRouter();
 
     return (
@@ -41,8 +42,12 @@ function TopBar({ title, subtitle, workflowId }: TopBarProps) {
                 </div>
             </div>
             <div className='flex gap-1 flex-1 justify-end'>
-                <ExecuteButton workflowId={workflowId} />
-                <SaveButton workflowId={workflowId} />
+                {!hideButtons && (
+                    <>
+                        <ExecuteButton workflowId={workflowId} />
+                        <SaveButton workflowId={workflowId} />
+                    </>
+                )}
             </div>
         </header>
     );

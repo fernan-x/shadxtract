@@ -7,6 +7,7 @@ import { getWorkflowByIdUseCase } from '@/providers/workflow.provider';
 import { prisma } from '@/lib/prisma';
 import { TaskRegistry } from '@/lib/workflow/task/registry';
 import { ExecutionPhaseStatus, WorkflowExecutionStatus, WorkflowExecutionTrigger } from '@/core/domain/workflow/workflow.entity';
+import { redirect } from 'next/navigation';
 
 export async function runWorkflow(form: { workflowId: string, flowDefinition?: string }) {
     const { userId } = await auth();
@@ -74,5 +75,5 @@ export async function runWorkflow(form: { workflowId: string, flowDefinition?: s
         throw new Error('Failed to create workflow execution');
     }
 
-    return execution.id;
+    redirect(`/workflow/runs/${workflowId}/${execution.id}`);
 }
