@@ -12,6 +12,7 @@ import {
   WorkflowExecutionTrigger,
 } from "@/core/domain/workflow/workflow.entity";
 import { redirect } from "next/navigation";
+import { executeWorkflow } from "@/lib/workflow/executeWorkflow";
 
 export async function runWorkflow(form: {
   workflowId: string;
@@ -81,6 +82,8 @@ export async function runWorkflow(form: {
   if (!execution) {
     throw new Error("Failed to create workflow execution");
   }
+
+  executeWorkflow(execution.id);
 
   redirect(`/workflow/runs/${workflowId}/${execution.id}`);
 }
