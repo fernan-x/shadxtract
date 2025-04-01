@@ -5,6 +5,11 @@ import {
   ExecutionPhaseStatus,
   WorkflowExecutionStatus,
 } from "@/core/domain/workflow/workflow.entity";
+import { ExecutionPhase } from "@prisma/client";
+import { AppNode } from "@/ui/types/app-node";
+import { TaskRegistry } from "./task/registry";
+import { waitFor } from "../helpers/wait-for";
+import { ExecutorRegistry } from "./executor/registry";
 
 // TODO : Unit test this
 export const executeWorkflow = async (executionId: string) => {
@@ -33,6 +38,12 @@ export const executeWorkflow = async (executionId: string) => {
   let creditsConsumed = 0;
   let executionFailed = false;
   for (const phase of execution.phases) {
+    const phaseExecution = await executeWorkflowPhase(phase);
+    if (!phaseExecution.success) {
+      executionFailed = true;
+      break;
+    }
+    // creditsConsumed += phaseExecution.creditsConsumed;
   }
 
   // Finalize execution
@@ -114,3 +125,50 @@ const finalizeWorkflowExecution = async (
     })
     .catch((err) => null);
 };
+
+const executeWorkflowPhase = async (phase: ExecutionPhase) => {
+  const startedAt = new Date();
+  const node = JSON.parse(phase.node) as AppNode;
+
+  // Update phase status
+  await prisma.executionPhase.update({
+    where: { id: phase.id },
+    data: {
+      status: ExecutionPhaseStatus.RUNNING,
+      startedAt,
+    },
+  });
+
+  const creditsRequired = TaskRegistry[node.data.type].credits;
+  console.log(`Executing phase ${phase.name} with ${creditsRequired} credits required`);
+
+  // TODO : decrement user balance
+
+  // Execute phase with simulation
+  const success = await executePhase(phase, node);
+
+  await finalizePhase(phase.id, success);
+
+  return { success };
+};
+
+const finalizePhase = async (phaseId: string, success: boolean) => {
+  const finalStatus = success ? ExecutionPhaseStatus.COMPLETED : ExecutionPhaseStatus.FAILED;
+
+  await prisma.executionPhase.update({
+    where: { id: phaseId },
+    data: {
+      status: finalStatus,
+      completedAt: new Date(),
+    },
+  });
+}
+
+const executePhase = async (phase: ExecutionPhase, node: AppNode) => {
+  const runFc = ExecutorRegistry[node.data.type];
+  if (!runFc) {
+    return false;
+  }
+
+  return await runFc();
+}
