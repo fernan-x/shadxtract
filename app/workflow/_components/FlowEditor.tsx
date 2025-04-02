@@ -19,12 +19,12 @@ import "@xyflow/react/dist/style.css";
 import { createFlowNode } from "@/lib/workflow/createFlowNode";
 import { AppNode } from "@/ui/types/app-node";
 import NodeComponent from "./nodes/NodeComponent";
-import { WorkflowType } from "@/core/domain/workflow/workflow.entity";
 import { useTheme } from "next-themes";
 import useSystemColorScheme from "@/ui/hooks/use-system-color-scheme";
 import DeletableEdge from "./nodes/edges/DeletableEdge";
 import { TaskType } from "@/ui/types/task";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { Workflow } from "@/core/domain/workflow/workflow.entity";
 
 const nodeTypes = {
   ShadXTractNode: NodeComponent,
@@ -37,7 +37,7 @@ const edgeTypes = {
 const snapGrid: [number, number] = [50, 50];
 const fitViewOptions = { padding: 2 };
 
-function FlowEditor({ workflow }: { workflow: WorkflowType }) {
+function FlowEditor({ workflow }: { workflow: Workflow }) {
   const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { setViewport, screenToFlowPosition, updateNodeData } = useReactFlow();

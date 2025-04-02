@@ -4,12 +4,11 @@ import { Workflow } from "@/core/domain/workflow/workflow.entity";
 import React from "react";
 import { ReactFlowProvider } from "@xyflow/react";
 import FlowEditor from "./FlowEditor";
-import { WorkflowType } from "@/core/domain/workflow/workflow.entity";
 import TopBar from "./topbar/TopBar";
 import TaskMenu from "./TaskMenu";
 import { FlowValidationProvider } from "@/ui/contexts/FlowValidationContext";
 
-function Editor({ workflow }: { workflow: WorkflowType }) {
+function Editor({ workflow }: { workflow: Workflow }) {
   return (
     <FlowValidationProvider>
       <ReactFlowProvider>

@@ -10,6 +10,7 @@ import { AppNode } from "@/ui/types/app-node";
 import { TaskRegistry } from "./task/registry";
 import { waitFor } from "../helpers/wait-for";
 import { ExecutorRegistry } from "./executor/registry";
+import { Environment, ExecutionEnvironment } from "@/ui/types/executor";
 
 // TODO : Unit test this
 export const executeWorkflow = async (executionId: string) => {
@@ -38,7 +39,7 @@ export const executeWorkflow = async (executionId: string) => {
   let creditsConsumed = 0;
   let executionFailed = false;
   for (const phase of execution.phases) {
-    const phaseExecution = await executeWorkflowPhase(phase);
+    const phaseExecution = await executeWorkflowPhase(phase, environment);
     if (!phaseExecution.success) {
       executionFailed = true;
       break;
@@ -126,9 +127,10 @@ const finalizeWorkflowExecution = async (
     .catch((err) => null);
 };
 
-const executeWorkflowPhase = async (phase: ExecutionPhase) => {
+const executeWorkflowPhase = async (phase: ExecutionPhase, environment: Environment) => {
   const startedAt = new Date();
   const node = JSON.parse(phase.node) as AppNode;
+  setupEnvironmentForPhase(node, environment);
 
   // Update phase status
   await prisma.executionPhase.update({
@@ -145,7 +147,7 @@ const executeWorkflowPhase = async (phase: ExecutionPhase) => {
   // TODO : decrement user balance
 
   // Execute phase with simulation
-  const success = await executePhase(phase, node);
+  const success = await executePhase(phase, node, environment);
 
   await finalizePhase(phase.id, success);
 
@@ -164,11 +166,37 @@ const finalizePhase = async (phaseId: string, success: boolean) => {
   });
 }
 
-const executePhase = async (phase: ExecutionPhase, node: AppNode) => {
+const executePhase = async (phase: ExecutionPhase, node: AppNode, environment: Environment) => {
   const runFc = ExecutorRegistry[node.data.type];
   if (!runFc) {
     return false;
   }
 
-  return await runFc();
+  const executionEnvironment :ExecutionEnvironment = createExecutionEnvironment(node, environment);
+
+  return await runFc(executionEnvironment);
+}
+
+const setupEnvironmentForPhase = (node: AppNode, environment: Environment) => {
+  environment.phases[node.id] = {
+    inputs: {},
+    outputs: {},
+  };
+  const inputs = TaskRegistry[node.data.type].inputs;
+
+  for (const input of inputs) {
+    const inputValue = node.data.inputs[input.name];
+    if (inputValue) {
+      environment.phases[node.id].inputs[input.name] = inputValue;
+      continue;
+    }
+
+
+  }
+}
+
+const createExecutionEnvironment = (node: AppNode, environment: Environment) => {
+  return {
+    getInput: (name: string) => environment.phases[node.id]?.inputs[name],
+  };
 }

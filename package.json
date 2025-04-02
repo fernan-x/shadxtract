@@ -14,7 +14,7 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.12.0",
+    "@clerk/nextjs": "^6.12.12",
     "@hookform/resolvers": "^4.1.0",
     "@prisma/client": "^6.4.1",
     "@radix-ui/react-accordion": "^1.2.3",
@@ -55,6 +55,7 @@
     "lucide-react": "^0.475.0",
     "next": "14.2.5",
     "next-themes": "^0.4.4",
+    "puppeteer": "^24.4.0",
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",

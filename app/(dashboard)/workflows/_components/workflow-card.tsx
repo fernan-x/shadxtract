@@ -1,7 +1,6 @@
 "use client";
 
-import { WorkflowStatusType } from "@/core/domain/workflow/workflow-status.value-object";
-import { WorkflowType } from "@/core/domain/workflow/workflow.entity";
+import { Workflow, WorkflowStatus } from "@/core/domain/workflow/workflow.entity";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/ui/components/ui/button";
 import { Card, CardContent } from "@/ui/components/ui/card";
@@ -9,12 +8,12 @@ import { FileTextIcon, PlayIcon, ShuffleIcon } from "lucide-react";
 import Link from "next/link";
 import WorkflowActions from "./workflow-actions";
 
-const statusColors: Record<WorkflowStatusType, string> = {
+const statusColors: Record<WorkflowStatus, string> = {
   draft: "bg-yellow-400 text-yellow-600",
   published: "bg-primary",
 };
 
-function WorkflowCard({ workflow }: { workflow: WorkflowType }) {
+function WorkflowCard({ workflow }: { workflow: Workflow }) {
   const isDraft = workflow.status === "draft";
 
   return (
