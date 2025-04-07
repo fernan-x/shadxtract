@@ -11,6 +11,8 @@ import { TaskRegistry } from "./task/registry";
 import { waitFor } from "../helpers/wait-for";
 import { ExecutorRegistry } from "./executor/registry";
 import { Environment, ExecutionEnvironment } from "@/ui/types/executor";
+import { TaskParamType } from "@/ui/types/task";
+import { Browser, Page } from "puppeteer";
 
 // TODO : Unit test this
 export const executeWorkflow = async (executionId: string) => {
@@ -138,6 +140,7 @@ const executeWorkflowPhase = async (phase: ExecutionPhase, environment: Environm
     data: {
       status: ExecutionPhaseStatus.RUNNING,
       startedAt,
+      inputs: JSON.stringify(environment.phases[node.id].inputs),
     },
   });
 
@@ -172,7 +175,7 @@ const executePhase = async (phase: ExecutionPhase, node: AppNode, environment: E
     return false;
   }
 
-  const executionEnvironment :ExecutionEnvironment = createExecutionEnvironment(node, environment);
+  const executionEnvironment = createExecutionEnvironment(node, environment);
 
   return await runFc(executionEnvironment);
 }
@@ -185,6 +188,7 @@ const setupEnvironmentForPhase = (node: AppNode, environment: Environment) => {
   const inputs = TaskRegistry[node.data.type].inputs;
 
   for (const input of inputs) {
+    if (input.type === TaskParamType.BROWSER_INSTANCE) continue;
     const inputValue = node.data.inputs[input.name];
     if (inputValue) {
       environment.phases[node.id].inputs[input.name] = inputValue;
@@ -195,8 +199,16 @@ const setupEnvironmentForPhase = (node: AppNode, environment: Environment) => {
   }
 }
 
-const createExecutionEnvironment = (node: AppNode, environment: Environment) => {
+const createExecutionEnvironment = (node: AppNode, environment: Environment): ExecutionEnvironment<any> => {
   return {
     getInput: (name: string) => environment.phases[node.id]?.inputs[name],
+    getBrowser: () => environment.browser,
+    setBrowser: (browser: Browser) => {
+      environment.browser = browser;
+    },
+    getPage: () => environment.page,
+    setPage: (page: Page) => {
+      environment.page = page;
+    },
   };
 }

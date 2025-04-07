@@ -1,10 +1,11 @@
 import { ExecutionEnvironment } from "@/ui/types/executor";
 import puppeteer from "puppeteer";
+import { LaunchBrowserTask } from "../task/launch-browser";
 
-export const LaunchBrowserExecutor = async (environment: ExecutionEnvironment) => {
+export const LaunchBrowserExecutor = async (environment: ExecutionEnvironment<typeof LaunchBrowserTask>) => {
     try {
         const websiteUrl = environment.getInput("Website Url");
-        console.log(`Launching browser for ${websiteUrl}`);
+        console.debug(`[LaunchBrowserExecutor] Launching browser for ${websiteUrl}`);
         const browser = await puppeteer.launch({
             args: [
                 "--no-sandbox",
@@ -13,10 +14,11 @@ export const LaunchBrowserExecutor = async (environment: ExecutionEnvironment) =
                 "--disable-gpu",
             ],
         });
+        environment.setBrowser(browser);
         const page = await browser.newPage();
-        await page.goto("https://example.com");
-        console.log("Page title:", await page.title());
-        await browser.close();
+        await page.goto(websiteUrl);
+        environment.setPage(page);
+        console.debug("[LaunchBrowserExecutor] Page title:", await page.title());
         return true;
     } catch (error) {
         console.error(error);
