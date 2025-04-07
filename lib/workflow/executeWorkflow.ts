@@ -58,6 +58,7 @@ export const executeWorkflow = async (executionId: string) => {
   );
 
   // Clean up execution environment
+  await cleanupEnvironment(environment);
 
   revalidatePath("/workflow/runs");
 };
@@ -152,12 +153,13 @@ const executeWorkflowPhase = async (phase: ExecutionPhase, environment: Environm
   // Execute phase with simulation
   const success = await executePhase(phase, node, environment);
 
-  await finalizePhase(phase.id, success);
+  const outputs = environment.phases[node.id].outputs;
+  await finalizePhase(phase.id, success, outputs);
 
   return { success };
 };
 
-const finalizePhase = async (phaseId: string, success: boolean) => {
+const finalizePhase = async (phaseId: string, success: boolean, outputs: any) => {
   const finalStatus = success ? ExecutionPhaseStatus.COMPLETED : ExecutionPhaseStatus.FAILED;
 
   await prisma.executionPhase.update({
@@ -165,6 +167,7 @@ const finalizePhase = async (phaseId: string, success: boolean) => {
     data: {
       status: finalStatus,
       completedAt: new Date(),
+      outputs: JSON.stringify(outputs),
     },
   });
 }
@@ -202,6 +205,9 @@ const setupEnvironmentForPhase = (node: AppNode, environment: Environment) => {
 const createExecutionEnvironment = (node: AppNode, environment: Environment): ExecutionEnvironment<any> => {
   return {
     getInput: (name: string) => environment.phases[node.id]?.inputs[name],
+    setOutput: (name: string, value: string) => {
+      environment.phases[node.id].outputs[name] = value;
+    },
     getBrowser: () => environment.browser,
     setBrowser: (browser: Browser) => {
       environment.browser = browser;
@@ -211,4 +217,10 @@ const createExecutionEnvironment = (node: AppNode, environment: Environment): Ex
       environment.page = page;
     },
   };
+}
+
+const cleanupEnvironment = async (environment: Environment) => {
+  if (environment.browser) {
+    await environment.browser.close().catch(err => console.error("Error closing browser", err));
+  }
 }

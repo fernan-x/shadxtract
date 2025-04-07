@@ -4,7 +4,7 @@ import { PageToHtmlTask } from "../task/page-to-html";
 export const PageToHtmlExecutor = async (environment: ExecutionEnvironment<typeof PageToHtmlTask>) => {
     try {
         const html = await environment.getPage()!.content();
-        console.log(html);
+        environment.setOutput("Html", html);
         return true;
     } catch (error) {
         console.error(error);
