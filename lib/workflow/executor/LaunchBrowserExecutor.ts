@@ -20,7 +20,12 @@ export const LaunchBrowserExecutor = async (environment: ExecutionEnvironment<ty
         environment.setPage(page);
         console.debug("[LaunchBrowserExecutor] Page title:", await page.title());
         return true;
-    } catch (error) {
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            environment.log.error(error.message);
+        } else {
+            environment.log.error("Unknown error");
+        }
         console.error(error);
         return false;
     }

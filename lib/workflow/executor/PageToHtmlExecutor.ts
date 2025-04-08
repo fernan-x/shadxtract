@@ -6,7 +6,12 @@ export const PageToHtmlExecutor = async (environment: ExecutionEnvironment<typeo
         const html = await environment.getPage()!.content();
         environment.setOutput("Html", html);
         return true;
-    } catch (error) {
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            environment.log.error(error.message);
+        } else {
+            environment.log.error("Unknown error");
+        }
         console.error(error);
         return false;
     }
