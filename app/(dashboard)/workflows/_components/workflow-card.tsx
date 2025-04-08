@@ -1,6 +1,9 @@
 "use client";
 
-import { Workflow, WorkflowStatus } from "@/core/domain/workflow/workflow.entity";
+import {
+  Workflow,
+  WorkflowStatus,
+} from "@/core/domain/workflow/workflow.entity";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/ui/components/ui/button";
 import { Card, CardContent } from "@/ui/components/ui/card";

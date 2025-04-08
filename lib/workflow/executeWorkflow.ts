@@ -45,7 +45,11 @@ export const executeWorkflow = async (executionId: string) => {
   let creditsConsumed = 0;
   let executionFailed = false;
   for (const phase of execution.phases) {
-    const phaseExecution = await executeWorkflowPhase(phase, environment, edges);
+    const phaseExecution = await executeWorkflowPhase(
+      phase,
+      environment,
+      edges,
+    );
     if (!phaseExecution.success) {
       executionFailed = true;
       break;
@@ -134,7 +138,11 @@ const finalizeWorkflowExecution = async (
     .catch((err) => null);
 };
 
-const executeWorkflowPhase = async (phase: ExecutionPhase, environment: Environment, edges: Edge[]) => {
+const executeWorkflowPhase = async (
+  phase: ExecutionPhase,
+  environment: Environment,
+  edges: Edge[],
+) => {
   const logCollector = createLogCollector();
   const startedAt = new Date();
   const node = JSON.parse(phase.node) as AppNode;
@@ -152,7 +160,9 @@ const executeWorkflowPhase = async (phase: ExecutionPhase, environment: Environm
   });
 
   const creditsRequired = TaskRegistry[node.data.type].credits;
-  console.log(`Executing phase ${phase.name} with ${creditsRequired} credits required`);
+  console.log(
+    `Executing phase ${phase.name} with ${creditsRequired} credits required`,
+  );
 
   // TODO : decrement user balance
 
@@ -165,8 +175,15 @@ const executeWorkflowPhase = async (phase: ExecutionPhase, environment: Environm
   return { success };
 };
 
-const finalizePhase = async (phaseId: string, success: boolean, outputs: any, logCollector: LogCollector) => {
-  const finalStatus = success ? ExecutionPhaseStatus.COMPLETED : ExecutionPhaseStatus.FAILED;
+const finalizePhase = async (
+  phaseId: string,
+  success: boolean,
+  outputs: any,
+  logCollector: LogCollector,
+) => {
+  const finalStatus = success
+    ? ExecutionPhaseStatus.COMPLETED
+    : ExecutionPhaseStatus.FAILED;
 
   await prisma.executionPhase.update({
     where: { id: phaseId },
@@ -185,20 +202,33 @@ const finalizePhase = async (phaseId: string, success: boolean, outputs: any, lo
       },
     },
   });
-}
+};
 
-const executePhase = async (phase: ExecutionPhase, node: AppNode, environment: Environment, logCollector: LogCollector) => {
+const executePhase = async (
+  phase: ExecutionPhase,
+  node: AppNode,
+  environment: Environment,
+  logCollector: LogCollector,
+) => {
   const runFc = ExecutorRegistry[node.data.type];
   if (!runFc) {
     return false;
   }
 
-  const executionEnvironment = createExecutionEnvironment(node, environment, logCollector);
+  const executionEnvironment = createExecutionEnvironment(
+    node,
+    environment,
+    logCollector,
+  );
 
   return await runFc(executionEnvironment);
-}
+};
 
-const setupEnvironmentForPhase = (node: AppNode, environment: Environment, edges: Edge[]) => {
+const setupEnvironmentForPhase = (
+  node: AppNode,
+  environment: Environment,
+  edges: Edge[],
+) => {
   environment.phases[node.id] = {
     inputs: {},
     outputs: {},
@@ -214,16 +244,23 @@ const setupEnvironmentForPhase = (node: AppNode, environment: Environment, edges
     }
 
     // Get input value from the outputs of the previous node
-    const connectedEdge = edges.find(edge => edge.target === node.id && edge.targetHandle === input.name);
+    const connectedEdge = edges.find(
+      (edge) => edge.target === node.id && edge.targetHandle === input.name,
+    );
     if (!connectedEdge) {
-      console.error(`[SetupEnvironmentForPhase] No connected edge found for input ${input.name} of node ${node.id}`);
+      console.error(
+        `[SetupEnvironmentForPhase] No connected edge found for input ${input.name} of node ${node.id}`,
+      );
       continue;
     }
 
-    const outputValue = environment.phases[connectedEdge.source].outputs[connectedEdge.sourceHandle!];
+    const outputValue =
+      environment.phases[connectedEdge.source].outputs[
+        connectedEdge.sourceHandle!
+      ];
     environment.phases[node.id].inputs[input.name] = outputValue;
   }
-}
+};
 
 const createExecutionEnvironment = (
   node: AppNode,
@@ -245,10 +282,12 @@ const createExecutionEnvironment = (
     },
     log: logCollector,
   };
-}
+};
 
 const cleanupEnvironment = async (environment: Environment) => {
   if (environment.browser) {
-    await environment.browser.close().catch(err => console.error("Error closing browser", err));
+    await environment.browser
+      .close()
+      .catch((err) => console.error("Error closing browser", err));
   }
-}
+};
