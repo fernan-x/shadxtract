@@ -1,5 +1,6 @@
 import { Browser, Page } from "puppeteer";
 import { Task } from "./task";
+import { LogCollector } from "./log";
 
 export type Environment = {
     browser?: Browser;
@@ -19,4 +20,6 @@ export type ExecutionEnvironment<T extends Task> = {
     setBrowser(browser: Browser): void;
     getPage(): Page | undefined;
     setPage(page: Page): void;
+
+    log: LogCollector;
 }
