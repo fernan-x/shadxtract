@@ -15,7 +15,7 @@ import {
   LucideIcon,
   WorkflowIcon,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { Separator } from "@/ui/components/ui/separator";
 import { Button } from "@/ui/components/ui/button";
@@ -57,6 +57,19 @@ export default function ExecutionViewer({
 
   const creditsConsumed = getPhasesTotalCost(query.data?.phases ?? []);
   const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING;
+
+  useEffect(() => {
+    // Auto select the running phase
+    const phases = query.data?.phases || [];
+    if (isRunning) {
+      const phaseToSelect = phases.toSorted((a, b) => a.startedAt! > b.startedAt! ? -1 : 1)[0];
+      setSelectedPhase(phaseToSelect.id);
+      return;
+    }
+
+    const phaseToSelect = phases.toSorted((a, b) => a.completedAt! > b.completedAt! ? -1 : 1)[0];
+    setSelectedPhase(phaseToSelect.id);
+  }, [isRunning, query.data?.phases, setSelectedPhase]);
 
   return (
     <div className="flex w-full h-full">
