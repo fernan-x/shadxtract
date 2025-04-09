@@ -49,7 +49,11 @@ export const executeWorkflow = async (executionId: string) => {
       phase,
       environment,
       edges,
+      execution.userId,
     );
+
+    creditsConsumed += phaseExecution.creditsConsumed;
+
     if (!phaseExecution.success) {
       executionFailed = true;
       break;
@@ -142,6 +146,7 @@ const executeWorkflowPhase = async (
   phase: ExecutionPhase,
   environment: Environment,
   edges: Edge[],
+  userId: string,
 ) => {
   const logCollector = createLogCollector();
   const startedAt = new Date();
@@ -160,19 +165,25 @@ const executeWorkflowPhase = async (
   });
 
   const creditsRequired = TaskRegistry[node.data.type].credits;
-  console.log(
-    `Executing phase ${phase.name} with ${creditsRequired} credits required`,
-  );
 
-  // TODO : decrement user balance
-
-  // Execute phase with simulation
-  const success = await executePhase(phase, node, environment, logCollector);
+  let success = await decrementCredits(userId, creditsRequired, logCollector);
+  const creditsConsumed = success ? creditsRequired : 0;
+  if (success) {
+    // Execute phase if balance is sufficient
+    success = await executePhase(phase, node, environment, logCollector);
+  }
 
   const outputs = environment.phases[node.id].outputs;
-  await finalizePhase(phase.id, success, outputs, logCollector);
 
-  return { success };
+  await finalizePhase(
+    phase.id,
+    success,
+    outputs,
+    logCollector,
+    creditsConsumed,
+  );
+
+  return { success, creditsConsumed };
 };
 
 const finalizePhase = async (
@@ -180,6 +191,7 @@ const finalizePhase = async (
   success: boolean,
   outputs: any,
   logCollector: LogCollector,
+  creditsConsumed: number,
 ) => {
   const finalStatus = success
     ? ExecutionPhaseStatus.COMPLETED
@@ -191,6 +203,7 @@ const finalizePhase = async (
       status: finalStatus,
       completedAt: new Date(),
       outputs: JSON.stringify(outputs),
+      creditsConsumed,
       logs: {
         createMany: {
           data: logCollector.getAll().map((log) => ({
@@ -289,5 +302,30 @@ const cleanupEnvironment = async (environment: Environment) => {
     await environment.browser
       .close()
       .catch((err) => console.error("Error closing browser", err));
+  }
+};
+
+const decrementCredits = async (
+  userId: string,
+  amount: number,
+  logCollector: LogCollector,
+) => {
+  try {
+    await prisma.userBalance.update({
+      where: { userId, credits: { gte: amount } },
+      data: {
+        credits: {
+          decrement: amount,
+        },
+      },
+    });
+    console.info(
+      `[DecrementCredits] Decremented ${amount} credits for user ${userId}`,
+    );
+    return true;
+  } catch (error) {
+    console.error("[DecrementCredits] Error decrementing credits", error);
+    logCollector.error("Insufficient credits");
+    return false;
   }
 };

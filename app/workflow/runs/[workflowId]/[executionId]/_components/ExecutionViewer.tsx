@@ -26,6 +26,7 @@ import { GetWorkflowPhaseDetails } from "@/ui/actions/GetWorkflowPhaseDetails";
 import LogViewer from "./LogViewer";
 import ParameterViewer from "./ParameterViewer";
 import PhaseStatusBadge from "./PhaseStatusBadge";
+import ReactCountUpWrapper from "@/ui/components/ReactCountUpWrapper";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecution>>;
 
@@ -62,12 +63,16 @@ export default function ExecutionViewer({
     // Auto select the running phase
     const phases = query.data?.phases || [];
     if (isRunning) {
-      const phaseToSelect = phases.toSorted((a, b) => a.startedAt! > b.startedAt! ? -1 : 1)[0];
+      const phaseToSelect = phases.toSorted((a, b) =>
+        a.startedAt! > b.startedAt! ? -1 : 1,
+      )[0];
       setSelectedPhase(phaseToSelect.id);
       return;
     }
 
-    const phaseToSelect = phases.toSorted((a, b) => a.completedAt! > b.completedAt! ? -1 : 1)[0];
+    const phaseToSelect = phases.toSorted((a, b) =>
+      a.completedAt! > b.completedAt! ? -1 : 1,
+    )[0];
     setSelectedPhase(phaseToSelect.id);
   }, [isRunning, query.data?.phases, setSelectedPhase]);
 
@@ -107,7 +112,7 @@ export default function ExecutionViewer({
           <ExecutionLabel
             icon={CoinsIcon}
             label="Credits consumed"
-            value={creditsConsumed}
+            value={<ReactCountUpWrapper value={creditsConsumed} />}
           />
 
           <Separator />
@@ -170,7 +175,7 @@ export default function ExecutionViewer({
                   <CoinsIcon size={18} className="stroke-muted-foreground" />
                   <span>Credits</span>
                 </div>
-                <span>TODO</span>
+                <span>{phaseDetails.data.creditsConsumed}</span>
               </Badge>
 
               <Badge variant="outline" className="space-x-4">
