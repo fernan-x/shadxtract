@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
+import UserAvailableCreditsBadge from "./UserAvailableCreditsBadge";
 
 export default function DesktopSidebar() {
   const routes = useRoutes();
@@ -24,7 +25,9 @@ export default function DesktopSidebar() {
       <div className="flex items-center justify-center gap-2 border-b-[1px] border-separate p-4">
         <Logo />
       </div>
-      <div className="p-2">TODO CREDITS</div>
+      <div className="p-2">
+        <UserAvailableCreditsBadge />
+      </div>
       <div className="flex flex-col gap-1 p-2">
         {routes.map((route) => (
           <Link
@@ -66,6 +69,7 @@ export function MobileSidebar() {
               <SheetDescription>Accessibility menu</SheetDescription>
             </SheetHeader>
             <Logo onClick={() => setIsOpen((prev) => !prev)} />
+            <UserAvailableCreditsBadge />
             <div className="flex flex-col gap-1 p-2">
               {routes.map((route) => (
                 <Link
